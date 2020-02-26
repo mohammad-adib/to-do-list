@@ -1,3 +1,45 @@
+
+//  CONSTANTS
+const DIRECTIONS = {"UP":1 ,
+                    "DOWN":-1, 
+                    "LEFT":2, 
+                    "RIGHT":-2
+    };
+
+const DATATYPES = { "NOTYPE":-1 ,
+                    "TEXT":0 , 
+                    "NUMBER":1 , 
+                    "DATE":2, 
+                    "PEOPLE":3, 
+                    "PRIORITY":4, 
+                    "STATUS":5,
+                    "NAME":6 
+                };
+
+const CLS = {   "TBL_CNTR":"table-container", 
+                "TBL_MN":"table-main", 
+                "TBL_HDR":"table-header", 
+                "TBL_RW":"table-row", 
+                "TBL_CL":"table-cell", 
+                "TSK_NM":"task-name", 
+                "TSK_STS":"task-status", 
+                "TSK_DT":"task-date", 
+                "TSK_PRT":"task-priority",
+                "TSK_PPL":"task-people",
+                "TSK_TXT":"task-text", 
+                "HDR_RW":"header-row", 
+                "TSK_SLR":"task-selector" 
+            }
+
+const IDS = {   "TSK_CHK":"task_checkbox", 
+                "CLM_CHK":"column_checkbox" 
+            }
+
+// VARIABLE DECLERATIONS
+let selectedTasks = [];
+let selectedColumns = [];
+
+
 // CONSTRUCTORS
 class Header {
     constructor(name, datatype = DATATYPES.TEXT) {
@@ -21,6 +63,7 @@ class TableStorage {
         }
         this.innerStorage.push(newRow);
         this.rows += 1
+        return this;
     }
 
     removeRows (indices) {
@@ -29,11 +72,12 @@ class TableStorage {
             this.innerStorage.splice(index,1);
             this.rows -= 1;
         }
+        return this;
     }
 
-    moveRow (index, direction) {
+    moveRow (index, moveDirection) {
         
-        if (direction === DIRECTIONS.UP){       
+        if (moveDirection === DIRECTIONS.UP){       
             if (index > 0) {
                 let selectedRow = this.innerStorage.splice(index,1)[0];
                 this.innerStorage.splice(index-1,0,selectedRow);
@@ -45,7 +89,7 @@ class TableStorage {
                 this.innerStorage.splice(index+1,0,selectedRow);
             }
         }    
-
+        return this;
     }
 
 
@@ -54,7 +98,8 @@ class TableStorage {
         for (let i=0; i<(this.rows); i++) {
             this.innerStorage[i].push(null);
         }
-        this.cols += 1;      
+        this.cols += 1;
+        return this;      
     } 
 
     removeColumns (indices) {
@@ -65,14 +110,15 @@ class TableStorage {
             this.headers.splice(index,1)
             this.cols -= 1;
         }
+        return this;
     }
 
-    moveColumn (index, direction) {
+    moveColumn (index, moveDirection) {
         if ((moveDirection === DIRECTIONS.LEFT && index===1) || (moveDirection === DIRECTIONS.RIGHT && index===this.cols)) {
             return;
         }
 
-        if (direction === DIRECTIONS.RIGHT) {
+        if (moveDirection === DIRECTIONS.RIGHT) {
             if (index<this.cols){
                 for (let i=0; i<this.rows; i++) {
                     let selectedRow = this.innerStorage[i];
@@ -89,14 +135,33 @@ class TableStorage {
                 }
             }    
         }
+        return this;
     }
 
 
     setCellValue(row,col,value) {
-        this.innerStorage[row][col] = value;
+        let rowIndex = row
+        let colIndex = col
+        if (row<0) {
+            rowIndex = this.rows + row;
+        }
+        if (col<0) {
+            colIndex = this.cols + col;
+        }
+
+        this.innerStorage[rowIndex][colIndex] = value;
+        return this;
     }
     getCellValue(row,col) {
-        return this.innerStorage[row][col];
+        let rowIndex = row
+        let colIndex = col
+        if (row<0) {
+            rowIndex = this.rows + row;
+        }
+        if (col<0) {
+            colIndex = this.cols + col;
+        }   
+        return this.innerStorage[rowIndex][colIndex];
     }
 
     _returnClassName (dataType) {
@@ -162,60 +227,11 @@ $(document).ready(mainProcedure())
 
 function mainProcedure() {
 
-    // CONSTANTS
-    DIRECTIONS = {  "UP":1 ,
-                    "DOWN":-1, 
-                    "LEFT":2, 
-                    "RIGHT":-2
-                };
-
-    DATATYPES = {   "NOTYPE":-1 ,
-                    "TEXT":0 , 
-                    "NUMBER":1 , 
-                    "DATE":2, 
-                    "PEOPLE":3, 
-                    "PRIORITY":4, 
-                    "STATUS":5,
-                    "NAME":6 
-                };
-
-    CLS = { "TBL_CNTR":"table-container", 
-            "TBL_MN":"table-main", 
-            "TBL_HDR":"table-header", 
-            "TBL_RW":"table-row", 
-            "TBL_CL":"table-cell", 
-            "TSK_NM":"task-name", 
-            "TSK_STS":"task-status", 
-            "TSK_DT":"task-date", 
-            "TSK_PRT":"task-priority",
-            "TSK_PPL":"task-people",
-            "TSK_TXT":"task-text", 
-            "HDR_RW":"header-row", 
-            "TSK_SLR":"task-selector" }
-
-    IDS = { "TSK_CHK":"task_checkbox", 
-            "CLM_CHK":"column_checkbox" }
-
-    // VARIABLE DECLERATIONS
-    selectedTasks = [];
-    selectedColumns = [];
-
     initialHeaders = createInitialHeaders();
     mainTableStorage = new TableStorage("Table1",initialHeaders);
-    mainTableStorage.addRow();
-    mainTableStorage.setCellValue(0,0,"Task1")
-    mainTableStorage.setCellValue(0,3,"High")
-    mainTableStorage.addColumn(new Header("People",DATATYPES.PEOPLE));
-
-    mainTableStorage.addRow();
-    mainTableStorage.setCellValue(1,0,"Task2")
-    mainTableStorage.setCellValue(1,3,"Low")
-
-    mainTableStorage.addRow();
-    mainTableStorage.setCellValue(2,0,"Task3")
-    mainTableStorage.setCellValue(2,3,"Intermediate")
-
-    // mainTableStorage.removeColumns([1])
+    mainTableStorage.addRow().setCellValue(0,0,"Task1").setCellValue(0,3,"High");
+    mainTableStorage.addRow().setCellValue(1,0,"Task2").setCellValue(1,3,"Low");
+    mainTableStorage.addRow().setCellValue(2,0,"Task3").setCellValue(2,3,"Intermediate");
 
     mainTableStorage.generateHTMLTable()
 
@@ -295,6 +311,7 @@ function createInitialHeaders() {
 function addNewTask (taskName) {
     let lastRow = $(".table-main .table-row").eq(-1);
     $(".table-main").append($(lastRow).clone())
+    lastRow = $(".table-main .table-row").eq(-1);
     $(lastRow).find(".table-cell").each(function(index){
         switch(index) {
             case 0:
@@ -307,6 +324,7 @@ function addNewTask (taskName) {
                 $(this).html("")
           }
     })
+    mainTableStorage.addRow().setCellValue(-1,0,taskName)
 }
 
 function removeTasks() {
