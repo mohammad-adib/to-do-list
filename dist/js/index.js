@@ -38,7 +38,7 @@ const IDS = {   "TSK_CHK":"task_checkbox",
 // VARIABLE DECLERATIONS
 let selectedTasks = [];
 let selectedColumns = [];
-
+let selectedCell = {};
 
 // CONSTRUCTORS
 class Header {
@@ -59,7 +59,7 @@ class TableStorage {
     addRow () {
         let newRow = [];
         for (let i=0; i<(this.cols); i++) {
-            newRow.push(null);
+            newRow.push("");
         }
         this.innerStorage.push(newRow);
         this.rows += 1
@@ -164,20 +164,30 @@ class TableStorage {
         return this.innerStorage[rowIndex][colIndex];
     }
 
+    __processCellValue (dataType,value) {
+        switch (dataType){
+            case DATATYPES.DATE:
+                return `<input type='text' class='datepicker' value='${value}'`;
+                break;                 
+            case DATATYPES.PRIORITY:
+            return "";
+                break;
+            case DATATYPES.STATUS:
+            return "";
+                break;  
+            default:
+                return value;
+        }    
+    }
+
     _returnClassName (dataType) {
         switch (dataType){
             case DATATYPES.TEXT:
                 return CLS.TSK_TXT;
                 break;    
-            case DATATYPES.NUMBER:
-                return CLS.TSK_NM;
-                break;
             case DATATYPES.DATE:
                 return CLS.TSK_DT;
-                break;
-            case DATATYPES.PEOPLE:
-                return CLS.TSK_PPL;
-                break;                   
+                break;                 
             case DATATYPES.PRIORITY:
                 return CLS.TSK_PRT;
                 break;
@@ -195,7 +205,7 @@ class TableStorage {
     generateHTMLTable() {
         
         // TABLE
-        $(`.${CLS.TBL_CNTR}`).append(`<table class=${CLS.TBL_MN} > </table>`);
+        $(`.${CLS.TBL_CNTR}`).append(`<table class='table ${CLS.TBL_MN}' > </table>`);
         let mainTable = $(`.${CLS.TBL_CNTR} .${CLS.TBL_MN}`)
         // HEADERS
         $(mainTable).append(`<tr class=${CLS.HDR_RW} ></tr>`);
@@ -212,8 +222,12 @@ class TableStorage {
             let newRow = $(mainTable).find(`.${CLS.TBL_RW}`).eq(-1);
             newRow.append(`<td class='table-cell ${CLS.TSK_SLR}'> <input type="checkbox" id='${IDS.TSK_CHK}'/>
         </td>`)
-            for (let [i,col] of task.entries()){
-                newRow.append(`<td class="table-cell ${this._returnClassName(this.headers[i].dataType)}">${col}</td>`)
+            for (let [i,value] of task.entries()){
+                let className = this._returnClassName(this.headers[i].dataType);
+                let processedValue = this.__processCellValue(this.headers[i].dataType,value)
+                let contentEditable
+                (className === CLS.TSK_NM || className === CLS.TSK_TXT) ? contentEditable = "contenteditable='true'" : contentEditable="";
+                newRow.append(`<td class="table-cell ${className}" ${contentEditable}> ${processedValue} </td>`)
             }
         }
 
@@ -294,6 +308,25 @@ function mainProcedure() {
         const check_value = $(this).prop('checked');
         toggleColumnSelection(index,check_value);
     })
+
+    $(".table-main").on('click',".table-cell",function(){   
+        let tableRow = $(this).parents(".table-row");
+        let rowIndex = $(".table-row").index(tableRow);
+        let colIndex = $(tableRow).children(".table-cell").index($(this))-1
+        selectedCell = {row:rowIndex, col:colIndex}
+    })
+
+    $('.datepicker').datepicker(
+        {
+            onSelect: function(dateText, inst){
+                mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,dateText)
+            }
+    }
+    );
+    // $(".table-main").on('click','.task-date',function(){
+    //     console.log($(this))
+    //     $(this).datepicker();
+    // })
 }
 
 
@@ -413,7 +446,6 @@ function toggleTaskSelection(index,check_value) {
     if (check_value && (selectedColumns.length>0)) {
         let oldSelectedColumns = [...selectedColumns]
         for (let sc of oldSelectedColumns){
-            console.log(sc)
             toggleColumnSelection(sc,false);
         }
     }
@@ -441,7 +473,6 @@ function toggleTaskSelection(index,check_value) {
 }
 
 function toggleColumnSelection(index,check_value) {
-    console.log(selectedTasks)
     if (check_value && (selectedTasks.length>0)) {
         let oldSelectedTasks = [...selectedTasks]
         for (let st of oldSelectedTasks){

@@ -10,10 +10,12 @@ body {
     }
 }
 
-.container-hidden {
-    display: none;
-}
+
 
 .table-cell {
     color: white;
+    position: relative;
+    .task-name{
+        // width:180px;
+    }
 }
