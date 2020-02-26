@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	 <!-- <link rel="stylesheet" href="/dist/css/semantic.min.css"> -->
+	 <link rel="stylesheet" href="/dist/css/main.css">
+    <title>To-Do List Task</title>
+</head>
+<body>
+
+
+
+	<div class="root">
+		<div class="control-panel">
+			<div class="add-task">
+					<label>Add new task</label>
+					<input id="new_task_name" type="text" placeholder="Task Name">
+					<button id="add_button"> Add </button>
+			</div>
+			<div class="edit-task">
+					<label>Task name</label>
+					<input id="changed_task_name" type="text">
+					<button id="rename_task_button"> Apply </button>
+					<button id="moveup_task_button"> Move Up </button>
+					<button id="movedown_task_button"> Move Down </button>
+			</div>
+			<div class="remove-task">
+					<button id="remove_task_button"> Remove </button>
+			</div>
+			<div class="edit-column">
+					<button id="moveleft_column_button"> Move Left </button>
+					<button id="moveright_column_button"> Move Right </button>
+			</div>
+			<div class="remove-column">
+					<button id="remove_column_button"> Remove </button>
+			</div>
+		</div>
+
+		</div>
+		<div class="table-title">
+			<h2 contenteditable="true" class="table-title-text">To-Do List1</h2>
+		</div>
+		<div class="table-container">
+
+		</div>
+	</div>
+
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/index.js"></script>
+</body>
+</html>
