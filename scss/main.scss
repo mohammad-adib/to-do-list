@@ -4,14 +4,18 @@
 @import 'priority';
 
 
+.table-container {
+    // overflow: scroll;
+}
 
 
 .table-main {
-    border: 1px solid black;
-
+    display: block;
+    width: 900px;
     .table-header {
         background-color: aqua;
     }
+
 
     .task-status{
         padding-left: 20px;

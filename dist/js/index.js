@@ -186,10 +186,10 @@ class TableStorage {
     processCellValue (dataType,value) {
         switch (dataType){
             case DATATYPES.DATE:
-                return `<input type='text' class='form-control datepicker' value='${value}'`;
+                return `<input type='text' class='form-control datepicker' value="${value}"/>`;
                 break;
             case DATATYPES.NAME:
-                return `<input type='text' class='form-control taskpicker' value='${value}'`;
+                return `<input type='text' class='form-control taskpicker' value="${value}"/>`;
                 break;                   
             case DATATYPES.PRIORITY:
             return "";
@@ -248,7 +248,7 @@ class TableStorage {
     generateHTMLrow(mainTable,task=[]) {
         $(mainTable).append(`<tr class=${CLS.TBL_RW} ></tr>`);
         let newRow = $(mainTable).find(`.${CLS.TBL_RW}`).eq(-1);
-        newRow.append(`<td class='table-cell ${CLS.TSK_SLR}'> <input type="checkbox" id='${IDS.TSK_CHK}'/>
+        newRow.append(`<td class='table-cell ${CLS.TSK_SLR}'> <input type="checkbox" id='${IDS.TSK_CHK}'>
     </td>`)
         if (task.length === 0){
             for (let i=0; i<this.headers.length; i++){
@@ -278,9 +278,7 @@ function mainProcedure() {
     if (tempStorage===null) {
         initialHeaders = createInitialHeaders();
         mainTableStorage = new TableStorage("Table1",initialHeaders);
-        mainTableStorage.addRow().setCellValue(0,0,"Task1").setCellValue(0,3,"High");
-        mainTableStorage.addRow().setCellValue(1,0,"Task2").setCellValue(1,3,"Low");
-        mainTableStorage.addRow().setCellValue(2,0,"Task3").setCellValue(2,3,"Intermediate");
+        mainTableStorage.addRow().setCellValue(0,0,"Task1");
     } else {
         mainTableStorage = new TableStorage(tempStorage.tableName,tempStorage.headers,tempStorage.innerStorage);
     }
@@ -364,7 +362,7 @@ function mainProcedure() {
     })
 
     // CHANGING TASK NAME EVENT
-    $(".table-cell").on('blur',".taskpicker",function(){
+    $("body").on('blur',".taskpicker",function(){
         let prevValue = mainTableStorage.getCellValue(selectedCell.row,selectedCell.col);
         if ($(this).val() !== ""){
             mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,$(this).val())
@@ -374,13 +372,24 @@ function mainProcedure() {
     })
 
     // PICKING A DATE EVENT
-    $('.datepicker').datepicker(
-        {
-            onSelect: function(dateText, inst){
-                mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,dateText)
-            }
-    }
-    );
+
+    $("body").on('focus','.datepicker',function(){
+        $(this).datepicker(
+            {
+                onSelect: function(dateText, inst){
+                    mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,dateText)
+                }
+        }
+        );   
+    })
+
+    // $('.datepicker').datepicker(
+    //     {
+    //         onSelect: function(dateText, inst){
+    //             mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,dateText)
+    //         }
+    // }
+    // );
 
     $(".table-main").on('click','.task-status',function(e){
         e.stopPropagation();
