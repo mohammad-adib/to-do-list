@@ -1,0 +1,65 @@
+.style-urgent{
+    @include urgent;
+}
+
+.style-high{
+    @include high;
+}
+
+.style-medium{
+    @include medium;
+}
+
+.style-low{
+    @include low;
+}
+
+
+
+.task-priority{
+    cursor: pointer;
+}
+
+.priority {
+    display: none;
+    position: absolute;
+    z-index: 2;
+
+    .dropdown-toggle{
+        opacity: 0%;
+        cursor: default;
+    }
+
+    #{&}-menu{
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+
+    #{&}-urgent{
+        @include urgent;
+        @include _margin_top;
+        @include hover_lighten($urgent-color);
+    }
+
+    #{&}-high{
+        @include high;
+        @include _margin_top;
+        @include hover_lighten($high-color);
+    }
+
+    #{&}-medium{
+        @include medium;
+        @include _margin_top;
+        @include hover_lighten($medium-color);
+    }
+
+    #{&}-low{
+        @include low;
+        @include _margin_top;
+        @include hover_lighten($low-color);
+    }
+
+
+
+}

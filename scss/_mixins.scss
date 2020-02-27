@@ -1,4 +1,4 @@
-@mixin status_margin_top {
+@mixin _margin_top {
     margin-top: 8px;
 }
 
@@ -30,5 +30,26 @@
 
 @mixin done{
     background-color: $done-color; 
+    color: $light-text-color;
+}
+
+
+@mixin urgent{
+    background-color: $urgent-color; 
+    color: $light-text-color;
+}
+
+@mixin high{
+    background-color: $high-color; 
+    color: $light-text-color;
+}
+
+@mixin medium{
+    background-color: $medium-color; 
+    color: $light-text-color;
+}
+
+@mixin low{
+    background-color: $low-color; 
     color: $light-text-color;
 }

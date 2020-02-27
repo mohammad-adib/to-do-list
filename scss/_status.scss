@@ -41,25 +41,25 @@
 
     #{&}-stuck{
         @include stuck;
-        @include status_margin_top;
+        @include _margin_top;
         @include hover_lighten($stuck-color);
     }
 
     #{&}-in-progress{
         @include in_progress;
-        @include status_margin_top;
+        @include _margin_top;
         @include hover_lighten($in-progress-color);
     }
 
     #{&}-waiting-for-review{
         @include waiting_for_review;
-        @include status_margin_top;
+        @include _margin_top;
         @include hover_lighten($waiting-for-review-color);
     }
 
     #{&}-done{
         @include done;
-        @include status_margin_top;
+        @include _margin_top;
         @include hover_lighten($done-color);
     }
 

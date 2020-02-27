@@ -1,6 +1,7 @@
 @import 'variables';
 @import 'mixins';
-@import 'taskstatus';
+@import 'status';
+@import 'priority';
 
 .table-main {
     border: 1px solid black;

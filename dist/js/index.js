@@ -43,6 +43,13 @@ const STSCLS = {"Just Started":"style-just-started",
                 "":"style-none",
 }
 
+const PRTCLS = {"Urgent":"style-urgent",
+                "High":"style-high",
+                "Medium":"style-medium",
+                "Low":"style-low",
+                "":"style-none",
+}
+
 // VARIABLE DECLERATIONS
 let selectedTasks = [];
 let selectedColumns = [];
@@ -353,6 +360,27 @@ function mainProcedure() {
         $(cellElement).removeClass(STSCLS[prevValue]);
         mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,newValue);
         $(cellElement).addClass(STSCLS[newValue]);
+    })
+
+
+    $(".table-main").on('click','.task-priority',function(e){
+        e.stopPropagation();
+        let cssStatus = $(this).offset();
+        cssStatus['display']='block';
+        $(".priority").css(cssStatus);
+        $(".priority").find('[data-toggle=dropdown]').dropdown('toggle');
+    })
+
+    $(".priority").on("click",'.dropdown-item',function(){
+        selectedPriorityIndex = $(".priority").find('.dropdown-item').index($(this));
+        newValue = $(this).html();
+        let rowElement = $(".table-row").eq(selectedCell.row);
+        let cellElement = $(rowElement).children(".table-cell").eq(selectedCell.col+1)
+        $(cellElement).html(newValue)
+        prevValue = mainTableStorage.getCellValue(selectedCell.row,selectedCell.col)
+        $(cellElement).removeClass(PRTCLS[prevValue]);
+        mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,newValue);
+        $(cellElement).addClass(PRTCLS[newValue]);
     })
 
 }
