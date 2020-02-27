@@ -3,6 +3,9 @@
 @import 'status';
 @import 'priority';
 
+
+
+
 .table-main {
     border: 1px solid black;
 
@@ -10,10 +13,40 @@
         background-color: aqua;
     }
 
-    .table-row {
-        height: 15px;
+    .task-status{
+        padding-left: 20px;
+        width: 180px;
+        @include transition-ease;
     }
 
+    .task-priority{
+        padding-left: 20px;
+        width: 150px;
+        @include transition-ease;
+    }
+
+    .task-date {
+        width: 150px;
+    }
+
+    .task-text {
+        width: 150px;
+    }
+
+    .taskpicker {
+        width: 100%;
+    }
+
+    #column_checkbox{
+        width: 15px;
+        height: 15px;
+        margin-right: 5px;
+    }
+
+    #task_checkbox{
+        width: 15px;
+        height: 15px;
+    }
 }
 
 

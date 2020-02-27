@@ -6,14 +6,12 @@ const DIRECTIONS = {"UP":1 ,
                     "RIGHT":-2
     };
 
-const DATATYPES = { "NOTYPE":-1 ,
-                    "TEXT":0 , 
-                    "NUMBER":1 , 
-                    "DATE":2, 
-                    "PEOPLE":3, 
-                    "PRIORITY":4, 
-                    "STATUS":5,
-                    "NAME":6 
+const DATATYPES = { "NOTYPE":-1,
+                    "TEXT":0,
+                    "DATE":1,  
+                    "PRIORITY":2, 
+                    "STATUS":3,
+                    "NAME":4 
                 };
 
 const CLS = {   "TBL_CNTR":"table-container", 
@@ -49,6 +47,12 @@ const PRTCLS = {"Urgent":"style-urgent",
                 "Low":"style-low",
                 "":"style-none",
 }
+
+const CLTYPCLS = {  "Text":"task-text",
+                    "Due Date":"task-date",
+                    "Priority":"task-priority",
+}
+
 
 // VARIABLE DECLERATIONS
 let selectedTasks = [];
@@ -179,11 +183,14 @@ class TableStorage {
         return this.innerStorage[rowIndex][colIndex];
     }
 
-    __processCellValue (dataType,value) {
+    processCellValue (dataType,value) {
         switch (dataType){
             case DATATYPES.DATE:
-                return `<input type='text' class='datepicker' value='${value}'`;
-                break;                 
+                return `<input type='text' class='form-control datepicker' value='${value}'`;
+                break;
+            case DATATYPES.NAME:
+                return `<input type='text' class='form-control taskpicker' value='${value}'`;
+                break;                   
             case DATATYPES.PRIORITY:
             return "";
                 break;
@@ -220,12 +227,12 @@ class TableStorage {
     generateHTMLTable() {
         
         // TABLE
-        $(`.${CLS.TBL_CNTR}`).append(`<table class='table ${CLS.TBL_MN}' > </table>`);
+        $(`.${CLS.TBL_CNTR}`).append(`<table class='table table-sm ${CLS.TBL_MN}' > </table>`);
         let mainTable = $(`.${CLS.TBL_CNTR} .${CLS.TBL_MN}`)
         // HEADERS
         $(mainTable).append(`<tr class=${CLS.HDR_RW} ></tr>`);
         let headerRow = $(mainTable).find(`.${CLS.HDR_RW}`);
-        headerRow.append(`<th class=${CLS.TBL_HDR}><input type="checkbox" id=${IDS.TSK_CHK} /></th>`);
+        headerRow.append(`<th class=${CLS.TBL_HDR}><input type="checkbox"  id=${IDS.TSK_CHK} /></th>`);
         for (let header of this.headers) {
             headerRow.append(`<th class=${CLS.TBL_HDR}><input type="checkbox" id='${IDS.CLM_CHK}' />${header.name}</th>`)
         }
@@ -233,19 +240,30 @@ class TableStorage {
         
         //  TABLE ROW
         for (let task of this.innerStorage) {
-            $(mainTable).append(`<tr class=${CLS.TBL_RW} ></tr>`);
-            let newRow = $(mainTable).find(`.${CLS.TBL_RW}`).eq(-1);
-            newRow.append(`<td class='table-cell ${CLS.TSK_SLR}'> <input type="checkbox" id='${IDS.TSK_CHK}'/>
-        </td>`)
-            for (let [i,value] of task.entries()){
-                let className = this._returnClassName(this.headers[i].dataType);
-                let processedValue = this.__processCellValue(this.headers[i].dataType,value)
-                let contentEditable
-                (className === CLS.TSK_NM || className === CLS.TSK_TXT) ? contentEditable = "contenteditable='true'" : contentEditable="";
-                newRow.append(`<td class="table-cell ${className}" ${contentEditable}> ${processedValue} </td>`)
-            }
+            this.generateHTMLrow(mainTable,task)
         }
 
+    }
+
+    generateHTMLrow(mainTable,task=[]) {
+        $(mainTable).append(`<tr class=${CLS.TBL_RW} ></tr>`);
+        let newRow = $(mainTable).find(`.${CLS.TBL_RW}`).eq(-1);
+        newRow.append(`<td class='table-cell ${CLS.TSK_SLR}'> <input type="checkbox" id='${IDS.TSK_CHK}'/>
+    </td>`)
+        if (task.length === 0){
+            for (let i=0; i<this.headers.length; i++){
+                task.push("");
+            }
+        }
+        for (let [i,value] of task.entries()){
+            let className = this._returnClassName(this.headers[i].dataType);
+            let processedValue = this.processCellValue(this.headers[i].dataType,value)
+            newRow.append(`<td class="table-cell ${className}"> ${processedValue} </td>`)
+        } 
+    }
+
+    saveTableStorage(){
+        localStorage.setItem("mainTableStorage",JSON.stringify(this));
     }
 
 }
@@ -256,18 +274,24 @@ $(document).ready(mainProcedure())
 
 function mainProcedure() {
 
-    initialHeaders = createInitialHeaders();
-    mainTableStorage = new TableStorage("Table1",initialHeaders);
-    mainTableStorage.addRow().setCellValue(0,0,"Task1").setCellValue(0,3,"High");
-    mainTableStorage.addRow().setCellValue(1,0,"Task2").setCellValue(1,3,"Low");
-    mainTableStorage.addRow().setCellValue(2,0,"Task3").setCellValue(2,3,"Intermediate");
+    tempStorage = JSON.parse(localStorage.getItem("mainTableStorage"));
+    if (tempStorage===null) {
+        initialHeaders = createInitialHeaders();
+        mainTableStorage = new TableStorage("Table1",initialHeaders);
+        mainTableStorage.addRow().setCellValue(0,0,"Task1").setCellValue(0,3,"High");
+        mainTableStorage.addRow().setCellValue(1,0,"Task2").setCellValue(1,3,"Low");
+        mainTableStorage.addRow().setCellValue(2,0,"Task3").setCellValue(2,3,"Intermediate");
+    } else {
+        mainTableStorage = new TableStorage(tempStorage.tableName,tempStorage.headers,tempStorage.innerStorage);
+    }
+
 
     mainTableStorage.generateHTMLTable()
 
     decideAccess();
 
     // ADD TASK BUTTON EVENT
-    $("#add_button").on('click',function(){
+    $("#add_task_button").on('click',function(){
         // ADDS NEW ITEM TO THE TABLE
         addNewTask($("#new_task_name").val())
         // EMPTIES THE NEW TASK INPUT
@@ -299,6 +323,13 @@ function mainProcedure() {
     })
 
 
+    // ADD COLUMN BUTTON EVENT
+    $("#add_column_button").on('click',function(){
+        let name = $("#new_column_name").val();
+        let dataType =  $("#new_column_type").val();
+        console.log(name,dataType)
+        addColumn(name,dataType)
+    })
 
     // MOVE UP COLUMN BUTTON EVENT
     $("#moveleft_column_button").on('click',function(){
@@ -330,6 +361,16 @@ function mainProcedure() {
         let rowIndex = $(".table-row").index(tableRow);
         let colIndex = $(tableRow).children(".table-cell").index($(this))-1
         selectedCell = {row:rowIndex, col:colIndex}
+    })
+
+    // CHANGING TASK NAME EVENT
+    $(".table-cell").on('blur',".taskpicker",function(){
+        let prevValue = mainTableStorage.getCellValue(selectedCell.row,selectedCell.col);
+        if ($(this).val() !== ""){
+            mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,$(this).val())
+        }else {
+            $(this).val(prevValue);
+        }
     })
 
     // PICKING A DATE EVENT
@@ -365,9 +406,9 @@ function mainProcedure() {
 
     $(".table-main").on('click','.task-priority',function(e){
         e.stopPropagation();
-        let cssStatus = $(this).offset();
-        cssStatus['display']='block';
-        $(".priority").css(cssStatus);
+        let cssPriority = $(this).offset();
+        cssPriority['display']='block';
+        $(".priority").css(cssPriority);
         $(".priority").find('[data-toggle=dropdown]').dropdown('toggle');
     })
 
@@ -390,7 +431,7 @@ function mainProcedure() {
 // FUNCTIONS
 
 function createInitialHeaders() {
-    taskNameHeader = new Header("Task Name", DATATYPES.TEXT);
+    taskNameHeader = new Header("Task Name", DATATYPES.NAME);
     statusHeader = new Header("Status", DATATYPES.STATUS);
     dueDateHeader = new Header("Due Date", DATATYPES.DATE);
     priorityHeader = new Header("Priority", DATATYPES.PRIORITY);
@@ -398,21 +439,12 @@ function createInitialHeaders() {
 }
 
 function addNewTask (taskName) {
-    let lastRow = $(".table-main .table-row").eq(-1);
-    $(".table-main").append($(lastRow).clone())
-    lastRow = $(".table-main .table-row").eq(-1);
-    $(lastRow).find(".table-cell").each(function(index){
-        switch(index) {
-            case 0:
-                $(this).find("#task_checkbox").prop('checked',false);
-                break;
-            case 1:
-                $(this).html(taskName)
-              break;
-            default:
-                $(this).html("")
-          }
-    })
+    const task = [];
+    for (let i=0; i<mainTableStorage.headers.length; i++){
+        task.push("");
+    }
+    task[0]=taskName;
+    mainTableStorage.generateHTMLrow($('.table-main'),task)
     mainTableStorage.addRow().setCellValue(-1,0,taskName)
 }
 
@@ -442,6 +474,35 @@ function moveTask(index,moveDirection) {
     }
     mainTableStorage.moveRow(index,moveDirection)
     
+    
+}
+
+function returnType(columnType) {
+    switch (columnType){
+        case "Text":
+            return DATATYPES.TEXT;
+            break;
+        case "Due Date":
+            return DATATYPES.DATE;
+            break;
+        case "Priority":
+            return DATATYPES.PRIORITY;
+            break;
+        default:
+            return DATATYPES.NOTYPE;
+            break;            
+    }
+}
+
+function addColumn(name,columnType){
+    newTableCell = `<td class='table-cell ${CLTYPCLS[columnType]}'></td>`
+    for (let row of $(".table-main .table-row")) {
+        $(row).children('.table-cell').eq(-1).after(newTableCell)
+    }
+    let row = $(".table-main .header-row");
+    newTableCell = `<th class='table-header'><input type='checkbox' id='column_checkbox' >${name}</th>`
+    $(row).children(".table-header").eq(-1).after(newTableCell)
+    mainTableStorage.addColumn(new Header(name,returnType(columnType)))
     
 }
 

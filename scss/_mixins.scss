@@ -1,3 +1,7 @@
+@mixin transition-ease {
+    transition: all 0.25s ease-in-out;
+}
+
 @mixin _margin_top {
     margin-top: 8px;
 }
@@ -19,7 +23,7 @@
 }
 
 @mixin stuck{
-    background-color: $stuck-color !important; 
+    background-color: $stuck-color; 
     color: $light-text-color;
 }
 

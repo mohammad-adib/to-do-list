@@ -44,9 +44,9 @@
 	<div class="root">
 		<div class="control-panel">
 			<div class="add-task">
-					<label>Add new task</label>
+					<label>New task</label>
 					<input id="new_task_name" type="text" placeholder="Task Name">
-					<button id="add_button"> Add </button>
+					<button id="add_task_button"> Add </button>
 			</div>
 			<div class="edit-task">
 					<button id="moveup_task_button"> Move Up </button>
@@ -54,6 +54,17 @@
 			</div>
 			<div class="remove-task">
 					<button id="remove_task_button"> Remove </button>
+			</div>
+
+			<div class="add-column">
+				<label>New column</label>
+				<input id="new_column_name" type="text" placeholder="Column Name">
+				<select class="form-control" id="new_column_type">
+					<option>Text</option>
+					<option>Due Date</option>
+					<option>Status</option>
+				  </select>
+				<button id="add_column_button"> Add </button>
 			</div>
 			<div class="edit-column">
 					<button id="moveleft_column_button"> Move Left </button>
