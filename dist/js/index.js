@@ -35,6 +35,14 @@ const IDS = {   "TSK_CHK":"task_checkbox",
                 "CLM_CHK":"column_checkbox" 
             }
 
+const STSCLS = {"Just Started":"style-just-started",
+                "In Progress":"style-in-progress",
+                "Stuck":"style-stuck",
+                "Waiting for Review":"style-waiting-for-review",
+                "Done":"style-done",
+                "":"style-none",
+}
+
 // VARIABLE DECLERATIONS
 let selectedTasks = [];
 let selectedColumns = [];
@@ -309,6 +317,7 @@ function mainProcedure() {
         toggleColumnSelection(index,check_value);
     })
 
+    // SELECTING A TABLE CELL EVENT
     $(".table-main").on('click',".table-cell",function(){   
         let tableRow = $(this).parents(".table-row");
         let rowIndex = $(".table-row").index(tableRow);
@@ -316,6 +325,7 @@ function mainProcedure() {
         selectedCell = {row:rowIndex, col:colIndex}
     })
 
+    // PICKING A DATE EVENT
     $('.datepicker').datepicker(
         {
             onSelect: function(dateText, inst){
@@ -323,10 +333,28 @@ function mainProcedure() {
             }
     }
     );
-    // $(".table-main").on('click','.task-date',function(){
-    //     console.log($(this))
-    //     $(this).datepicker();
-    // })
+
+    $(".table-main").on('click','.task-status',function(e){
+        e.stopPropagation();
+        let cssStatus = $(this).offset();
+        cssStatus['display']='block';
+        $(".status").css(cssStatus);
+        $(".status").find('[data-toggle=dropdown]').dropdown('toggle');
+    })
+
+    
+    $(".status").on("click",'.dropdown-item',function(){
+        selectedStatusIndex = $(".status").find('.dropdown-item').index($(this));
+        newValue = $(this).html();
+        let rowElement = $(".table-row").eq(selectedCell.row);
+        let cellElement = $(rowElement).children(".table-cell").eq(selectedCell.col+1)
+        $(cellElement).html(newValue)
+        prevValue = mainTableStorage.getCellValue(selectedCell.row,selectedCell.col)
+        $(cellElement).removeClass(STSCLS[prevValue]);
+        mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,newValue);
+        $(cellElement).addClass(STSCLS[newValue]);
+    })
+
 }
 
 

@@ -1,0 +1,71 @@
+.style-just-started{
+    @include just_started;
+}
+
+.style-in-progress{
+    @include in_progress;
+}
+
+.style-stuck{
+    @include stuck;
+}
+
+.style-waiting-for-review{
+    @include waiting_for_review;
+}
+
+.style-done{
+    @include done;
+}
+
+
+.task-status{
+    cursor: pointer;
+}
+
+.status {
+    display: none;
+    position: absolute;
+    z-index: 2;
+
+    .dropdown-toggle{
+        opacity: 0%;
+        cursor: default;
+    }
+
+    #{&}-menu{
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+
+    #{&}-stuck{
+        @include stuck;
+        @include status_margin_top;
+        @include hover_lighten($stuck-color);
+    }
+
+    #{&}-in-progress{
+        @include in_progress;
+        @include status_margin_top;
+        @include hover_lighten($in-progress-color);
+    }
+
+    #{&}-waiting-for-review{
+        @include waiting_for_review;
+        @include status_margin_top;
+        @include hover_lighten($waiting-for-review-color);
+    }
+
+    #{&}-done{
+        @include done;
+        @include status_margin_top;
+        @include hover_lighten($done-color);
+    }
+
+    #{&}-just-started{
+        @include just_started;
+        @include hover_lighten($just-started-color);
+    }
+
+}

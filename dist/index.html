@@ -8,14 +8,38 @@
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link rel="stylesheet" href="/dist/css/main.css">
 	<script src="js/jquery-3.4.1.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 	<title>To-Do List Task</title>
 </head>
 <body>
 
+	<div class="btn-group status">
+		<button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="sr-only">Toggle Dropdown</span>
+		</button>
+		<div class="dropdown-menu status-menu">
+		  <a class="dropdown-item status-just-started" href="#">Just Started</a>
+		  <a class="dropdown-item status-in-progress" href="#">In Progress</a>
+		  <a class="dropdown-item status-stuck" href="#">Stuck</a>
+		  <a class="dropdown-item status-waiting-for-review" href="#">Waiting for Review</a>
+		  <a class="dropdown-item status-done" href="#">Done</a>
+		</div>
+	  </div>
 
+	  <div class="btn-group priority">
+		<button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="sr-only">Toggle Dropdown</span>
+		</button>
+		<div class="dropdown-menu priority-menu">
+		  <a class="dropdown-item priority-urgent" href="#">Just Started</a>
+		  <a class="dropdown-item priority-high" href="#">In Progress</a>
+		  <a class="dropdown-item priority-medium" href="#">Stuck</a>
+		  <a class="dropdown-item priority-low" href="#">Waiting for Review</a>
+		</div>
+	  </div>
 
 	<div class="root">
 		<div class="control-panel">
@@ -39,6 +63,9 @@
 					<button id="remove_column_button"> Remove </button>
 			</div>
 		</div>
+
+
+
 
 		</div>
 		<div class="table-title">

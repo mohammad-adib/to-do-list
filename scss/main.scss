@@ -1,6 +1,6 @@
-body {
-    background-color: #0f111a;
-}
+@import 'variables';
+@import 'mixins';
+@import 'taskstatus';
 
 .table-main {
     border: 1px solid black;
@@ -8,14 +8,13 @@ body {
     .table-header {
         background-color: aqua;
     }
-}
 
-
-
-.table-cell {
-    color: white;
-    position: relative;
-    .task-name{
-        // width:180px;
+    .table-row {
+        height: 15px;
     }
+
 }
+
+
+
+
