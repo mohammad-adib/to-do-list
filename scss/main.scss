@@ -13,24 +13,30 @@
     display: block;
     width: 900px;
     .table-header {
-        background-color: aqua;
+        background-color: $header-back-color;
+    }
+
+    .table-header {
+        vertical-align: middle;
     }
 
 
     .task-status{
         padding-left: 20px;
         width: 180px;
+        vertical-align: middle;
         @include transition-ease;
     }
 
     .task-priority{
         padding-left: 20px;
-        width: 150px;
+        width: 120px;
+        vertical-align: middle;
         @include transition-ease;
     }
 
     .task-date {
-        width: 150px;
+        width: 120px;
     }
 
     .task-text {
@@ -41,10 +47,18 @@
         width: 100%;
     }
 
+    .columnpicker {
+        display: inline-block;
+        width: 70%;
+        border: 0px;
+        background-color: $header-back-color;
+    }
+
     #column_checkbox{
         width: 15px;
         height: 15px;
         margin-right: 5px;
+        vertical-align: middle;
     }
 
     #task_checkbox{

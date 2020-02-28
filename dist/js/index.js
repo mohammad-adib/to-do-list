@@ -51,6 +51,7 @@ const PRTCLS = {"Urgent":"style-urgent",
 const CLTYPCLS = {  "Text":"task-text",
                     "Due Date":"task-date",
                     "Priority":"task-priority",
+                    "Status":"task-status"
 }
 
 
@@ -58,6 +59,7 @@ const CLTYPCLS = {  "Text":"task-text",
 let selectedTasks = [];
 let selectedColumns = [];
 let selectedCell = {};
+let selectedHeader = {};
 
 // CONSTRUCTORS
 class Header {
@@ -192,14 +194,34 @@ class TableStorage {
                 return `<input type='text' class='form-control taskpicker' value="${value}"/>`;
                 break;                   
             case DATATYPES.PRIORITY:
-            return "";
+                return "";
                 break;
             case DATATYPES.STATUS:
-            return "";
-                break;  
+                return "";
+                break;
+            case DATATYPES.TEXT:
+                return `<input type='text' class='form-control textpicker' value="${value}"/>`;
+                break;                      
             default:
                 return value;
         }    
+    }
+
+    _returnType(columnType) {
+        switch (columnType){
+            case "Text":
+                return DATATYPES.TEXT;
+                break;
+            case "Due Date":
+                return DATATYPES.DATE;
+                break;
+            case "Priority":
+                return DATATYPES.PRIORITY;
+                break;
+            default:
+                return DATATYPES.NOTYPE;
+                break;            
+        }
     }
 
     _returnClassName (dataType) {
@@ -214,7 +236,7 @@ class TableStorage {
                 return CLS.TSK_PRT;
                 break;
             case DATATYPES.STATUS:
-                return CLS. TSK_STS;
+                return CLS.TSK_STS;
                 break; 
             case DATATYPES.NAME:
                 return CLS.TSK_NM;
@@ -234,18 +256,24 @@ class TableStorage {
         let headerRow = $(mainTable).find(`.${CLS.HDR_RW}`);
         headerRow.append(`<th class=${CLS.TBL_HDR}><input type="checkbox"  id=${IDS.TSK_CHK} /></th>`);
         for (let header of this.headers) {
-            headerRow.append(`<th class=${CLS.TBL_HDR}><input type="checkbox" id='${IDS.CLM_CHK}' />${header.name}</th>`)
+            let content
+            if (header.dataType===DATATYPES.NAME) {
+                content = header.name 
+            }else {
+                content = `<input type='text' class='columnpicker' value="${header.name}"/>`
+            }
+            headerRow.append(`<th class=${CLS.TBL_HDR}><input type="checkbox" id='${IDS.CLM_CHK}' />${content}</th>`)
         }
         $(`#${IDS.CLM_CHK}`).eq(0).css("display","none");
         
         //  TABLE ROW
         for (let task of this.innerStorage) {
-            this.generateHTMLrow(mainTable,task)
+            this.generateHTMLRow(mainTable,task)
         }
 
     }
 
-    generateHTMLrow(mainTable,task=[]) {
+    generateHTMLRow(mainTable,task=[]) {
         $(mainTable).append(`<tr class=${CLS.TBL_RW} ></tr>`);
         let newRow = $(mainTable).find(`.${CLS.TBL_RW}`).eq(-1);
         newRow.append(`<td class='table-cell ${CLS.TSK_SLR}'> <input type="checkbox" id='${IDS.TSK_CHK}'>
@@ -260,6 +288,21 @@ class TableStorage {
             let processedValue = this.processCellValue(this.headers[i].dataType,value)
             newRow.append(`<td class="table-cell ${className}"> ${processedValue} </td>`)
         } 
+    }
+
+    generateHTMLColumn(mainTable,name,columnType) {
+        console.log(CLTYPCLS[columnType])
+        for (let row of $(mainTable).children(".table-row")) {
+            let value = this.processCellValue(this._returnType(columnType),"");
+            let newTableCell = `<td class='table-cell ${CLTYPCLS[columnType]}'>${value}</td>`
+            console.log(newTableCell)
+            $(row).children('.table-cell').eq(-1).after(newTableCell)
+        }
+        let row = $(mainTable).children(".header-row");
+        let newTableCell = `<th class='table-header'><input type='checkbox' id='column_checkbox' ><input type='text' class='columnpicker' value="${name}"/></th>`
+        $(row).children(".table-header").eq(-1).after(newTableCell)
+       
+       
     }
 
     saveTableStorage(){
@@ -325,8 +368,8 @@ function mainProcedure() {
     $("#add_column_button").on('click',function(){
         let name = $("#new_column_name").val();
         let dataType =  $("#new_column_type").val();
-        console.log(name,dataType)
-        addColumn(name,dataType)
+        mainTableStorage.generateHTMLColumn($('.table-main'),name,dataType)
+        mainTableStorage.addColumn(new Header(name,mainTableStorage._returnType(dataType)))
     })
 
     // MOVE UP COLUMN BUTTON EVENT
@@ -361,11 +404,34 @@ function mainProcedure() {
         selectedCell = {row:rowIndex, col:colIndex}
     })
 
+    // SELECTING A TABLE HEADER EVENT
+    $(".table-main").on('click',".table-header",function(){   
+        let tableRow = $(this).parents(".header-row");
+        let colIndex = $(tableRow).children(".table-header").index($(this))-1
+        selectedHeader = {col:colIndex}
+        console.log(selectedHeader)
+    })
+
     // CHANGING TASK NAME EVENT
     $("body").on('blur',".taskpicker",function(){
         let prevValue = mainTableStorage.getCellValue(selectedCell.row,selectedCell.col);
         if ($(this).val() !== ""){
             mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,$(this).val())
+        }else {
+            $(this).val(prevValue);
+        }
+    })
+
+    // CHANGING TASK NAME EVENT
+    $("body").on('blur',".textpicker",function(){
+        mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,$(this).val())
+    })
+
+    // CHANGING COLUMN NAME EVENT
+    $("body").on('blur',".columnpicker",function(){
+        let prevValue = mainTableStorage.headers[selectedHeader.col].name;
+        if ($(this).val() !== ""){
+            mainTableStorage.headers[selectedHeader.col].name = $(this).val()
         }else {
             $(this).val(prevValue);
         }
@@ -382,14 +448,6 @@ function mainProcedure() {
         }
         );   
     })
-
-    // $('.datepicker').datepicker(
-    //     {
-    //         onSelect: function(dateText, inst){
-    //             mainTableStorage.setCellValue(selectedCell.row,selectedCell.col,dateText)
-    //         }
-    // }
-    // );
 
     $(".table-main").on('click','.task-status',function(e){
         e.stopPropagation();
@@ -453,7 +511,7 @@ function addNewTask (taskName) {
         task.push("");
     }
     task[0]=taskName;
-    mainTableStorage.generateHTMLrow($('.table-main'),task)
+    mainTableStorage.generateHTMLRow($('.table-main'),task)
     mainTableStorage.addRow().setCellValue(-1,0,taskName)
 }
 
@@ -486,34 +544,7 @@ function moveTask(index,moveDirection) {
     
 }
 
-function returnType(columnType) {
-    switch (columnType){
-        case "Text":
-            return DATATYPES.TEXT;
-            break;
-        case "Due Date":
-            return DATATYPES.DATE;
-            break;
-        case "Priority":
-            return DATATYPES.PRIORITY;
-            break;
-        default:
-            return DATATYPES.NOTYPE;
-            break;            
-    }
-}
 
-function addColumn(name,columnType){
-    newTableCell = `<td class='table-cell ${CLTYPCLS[columnType]}'></td>`
-    for (let row of $(".table-main .table-row")) {
-        $(row).children('.table-cell').eq(-1).after(newTableCell)
-    }
-    let row = $(".table-main .header-row");
-    newTableCell = `<th class='table-header'><input type='checkbox' id='column_checkbox' >${name}</th>`
-    $(row).children(".table-header").eq(-1).after(newTableCell)
-    mainTableStorage.addColumn(new Header(name,returnType(columnType)))
-    
-}
 
 function removeColumns(){
     selectedColumns.sort()
