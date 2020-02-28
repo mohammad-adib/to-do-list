@@ -1,5 +1,16 @@
+/* 
+------------------------------------------------------------------------------------------
+This is the main javascript code for the "To Do List Task" project
+The following can divided into four main parts:
+    I)      Constant declarations
+    II)     Varaiable declarations
+    III)    Classes
+    IV)     Main Procedure
+    V)      Helper Functions
+------------------------------------------------------------------------------------------
+*/
+//  CONSTANT DECLARATIONS
 
-//  CONSTANTS
 const DIRECTIONS = {"UP":1 ,
                     "DOWN":-1, 
                     "LEFT":2, 
@@ -54,14 +65,15 @@ const CLTYPCLS = {  "Text":"task-text",
                     "Status":"task-status"
 }
 
-
+// ------------------------------------------------------------------------------
 // VARIABLE DECLERATIONS
 let selectedTasks = [];
 let selectedColumns = [];
 let selectedCell = {};
 let selectedHeader = {};
 
-// CONSTRUCTORS
+// ------------------------------------------------------------------------------
+// CLASSES
 class Header {
     constructor(name, datatype = DATATYPES.TEXT) {
         this.name = name;
@@ -93,6 +105,7 @@ class TableStorage {
             this.innerStorage.splice(index,1);
             this.rows -= 1;
         }
+        this.saveTableStorage()
         return this;
     }
 
@@ -110,6 +123,7 @@ class TableStorage {
                 this.innerStorage.splice(index+1,0,selectedRow);
             }
         }    
+        this.saveTableStorage()
         return this;
     }
 
@@ -129,7 +143,7 @@ class TableStorage {
             for (let i=0; i<this.rows; i++) {
                 this.innerStorage[i].splice(index,1)
             }
-            this.headers.splice(index,1)
+            tis.headers.splice(index,1)
             this.cols -= 1;
         }
         this.saveTableStorage()
@@ -142,21 +156,22 @@ class TableStorage {
         }
 
         if (moveDirection === DIRECTIONS.RIGHT) {
-            if (index<this.cols){
-                for (let i=0; i<this.rows; i++) {
-                    let selectedRow = this.innerStorage[i];
-                    let selectedCol = selectedRow.splice(index,1)[0];
-                    selectedRow.splice(index+1,0,selectedCol);
-                }
+            for (let i=0; i<this.rows; i++) {
+                let selectedRow = this.innerStorage[i];
+                let selectedCol = selectedRow.splice(index,1)[0];
+                selectedRow.splice(index+1,0,selectedCol);
             }
+            let selectedHeader = this.headers.splice(index,1)[0];
+            this.headers.splice(index+1,0,selectedHeader);
         }else {
-            if (index>0){
-                for (let i=0; i<this.rows; i++) {
-                    let selectedRow = this.innerStorage[i];
-                    let selectedCol = selectedRow.splice(index,1)[0];
-                    selectedRow.splice(index-1,0,selectedCol);
-                }
-            }    
+            for (let i=0; i<this.rows; i++) {
+                let selectedRow = this.innerStorage[i];
+                let selectedCol = selectedRow.splice(index,1)[0];
+                selectedRow.splice(index-1,0,selectedCol);
+            }
+            let selectedHeader = this.headers.splice(index,1)[0];
+            this.headers.splice(index-1,0,selectedHeader);
+  
         }
         this.saveTableStorage()
         return this;
@@ -210,10 +225,10 @@ class TableStorage {
                 return `<input type='text' class='form-control taskpicker' value="${value}"/>`;
                 break;                   
             case DATATYPES.PRIORITY:
-                return "";
+                return value;
                 break;
             case DATATYPES.STATUS:
-                return "";
+                return value;
                 break;
             case DATATYPES.TEXT:
                 return `<input type='text' class='form-control textpicker' value="${value}"/>`;
@@ -288,14 +303,13 @@ class TableStorage {
         // TABLE TITLE
         $(`.${CLS.TBL_CNTR}`).append(`<input type='text' class='lead tablenamepicker' value="${this.tableName}"/>`)
     } 
-    removeHTMLTableTitle(){
-        // TABLE TITLE
-        $('.tablenamepicker').remove()
-    }  
-    generateHTMLTable() {
+    
+    generateHTMLTable(){
         // TABLE
         $(`.${CLS.TBL_CNTR}`).append(`<table class='table table-sm ${CLS.TBL_MN}' > </table>`);
-        let mainTable = $(`.${CLS.TBL_CNTR} .${CLS.TBL_MN}`)
+    }
+    
+    generateHTMLTableContents(mainTable) {
         // HEADERS
         $(mainTable).append(`<tr class=${CLS.HDR_RW} ></tr>`);
         let headerRow = $(mainTable).find(`.${CLS.HDR_RW}`);
@@ -330,6 +344,11 @@ class TableStorage {
         }
         for (let [i,value] of task.entries()){
             let className = this._returnClassName(this.headers[i].dataType);
+            if (this.headers[i].dataType === DATATYPES.STATUS) {
+                className += ` ${STSCLS[value]}`; 
+            }else if((this.headers[i].dataType === DATATYPES.PRIORITY)){
+                className += ` ${PRTCLS[value]}`; 
+            }
             let processedValue = this.processCellValue(this.headers[i].dataType,value)
             newRow.append(`<td class="table-cell ${className}"> ${processedValue} </td>`)
         } 
@@ -357,8 +376,8 @@ class TableStorage {
         $(mainTable).css('width',`${tableWidth}px`);
     }
 
-    removeHTMLTable(mainTable){
-        $(mainTable).remove()
+    clearHTMLTable(mainTable){
+        $(mainTable).find("*").remove()
     }
 
     saveTableStorage(){
@@ -369,12 +388,14 @@ class TableStorage {
     }
 }
 
+// ------------------------------------------------------------------------------
 // MAIN PROCEDURE
 
 $(document).ready(mainProcedure())
 
 function mainProcedure() {
 
+    //  GENERATING THE MAIN TABLE
     tableRender()
     // ADD TASK BUTTON EVENT
     $("#add_task_button").on('click',function(){
@@ -411,8 +432,7 @@ function mainProcedure() {
     // ADD COLUMN BUTTON EVENT
     $("#reset_table_button").on('click',function(){
         mainTableStorage.clearTableStorage();
-        mainTableStorage.removeHTMLTableTitle()
-        mainTableStorage.removeHTMLTable($('.table-main'),)
+        mainTableStorage.clearHTMLTable($('.table-main'),)
         tableRender()
     })
 
@@ -497,7 +517,6 @@ function mainProcedure() {
     })
 
     // PICKING A DATE EVENT
-
     $("body").on('focus','.datepicker',function(){
         $(this).datepicker(
             {
@@ -508,7 +527,9 @@ function mainProcedure() {
         );   
     })
 
+    // TRIGGERRING STATUS DROPDOWN
     $(".table-main").on('click','.task-status',function(e){
+        console.log('STATUS')
         e.stopPropagation();
         let cssStatus = $(this).offset();
         cssStatus['display']='block';
@@ -516,7 +537,7 @@ function mainProcedure() {
         $(".status").find('[data-toggle=dropdown]').dropdown('toggle');
     })
 
-    
+    // PICKING A STATUS EVENT
     $(".status").on("click",'.dropdown-item',function(){
         selectedStatusIndex = $(".status").find('.dropdown-item').index($(this));
         newValue = $(this).html();
@@ -529,7 +550,7 @@ function mainProcedure() {
         $(cellElement).addClass(STSCLS[newValue]);
     })
 
-
+    // TRIGGERING PRIORITY SROPDOWN
     $(".table-main").on('click','.task-priority',function(e){
         e.stopPropagation();
         let cssPriority = $(this).offset();
@@ -538,6 +559,7 @@ function mainProcedure() {
         $(".priority").find('[data-toggle=dropdown]').dropdown('toggle');
     })
 
+    // PICKING A PRIORITY EVENT
     $(".priority").on("click",'.dropdown-item',function(){
         selectedPriorityIndex = $(".priority").find('.dropdown-item').index($(this));
         newValue = $(this).html();
@@ -553,9 +575,8 @@ function mainProcedure() {
 }
 
 
-
+// ------------------------------------------------------------------------------
 // FUNCTIONS
-
 function createInitialHeaders() {
     taskNameHeader = new Header("Task Name", DATATYPES.NAME);
     statusHeader = new Header("Status", DATATYPES.STATUS);
@@ -573,8 +594,13 @@ function tableRender(){
     } else {
         mainTableStorage = new TableStorage(tempStorage.tableName,tempStorage.headers,tempStorage.innerStorage);
     }
-    mainTableStorage.generateHTMLTableTitle()
-    mainTableStorage.generateHTMLTable()
+    let mainTable = $(".table-main");
+    if (mainTable.length === 0){
+        mainTableStorage.generateHTMLTableTitle()
+        mainTableStorage.generateHTMLTable();
+        mainTable = $(".table-main");
+    }
+    mainTableStorage.generateHTMLTableContents(mainTable)
     mainTableStorage.adjustHTMLTableWidth()
     decideAccess();
 }
