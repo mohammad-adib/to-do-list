@@ -81,6 +81,7 @@ class Header {
     }
 }
 
+// Save a copy of the HTML table in memory and saves the changes in the localStorage
 class TableStorage {
     constructor(name,initialHeaders,innerStorage=[]) {
         this.tableName = name;
