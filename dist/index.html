@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<link rel="stylesheet" href="/dist/css/main.css">
+	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+	<link rel="stylesheet" href="css/main.css">
 	<script src="js/jquery-3.4.1.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="js/popper.min.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->
+	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
+	<script src="js/bootstrap.min.js" ></script>
+	<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+	<script src="js/jquery-ui.js" ></script>
 
 	<title>To-Do List Task</title>
 </head>
@@ -46,7 +51,7 @@
 			<div class="card-body control-panel">
 				<div class="row">
 					<div class="col-2 col-lg-1 resset-table">
-							<button class="btn btn-light control-button reset-button" id="reset_table_button"> <img src="/dist/src/svg/trash-outline.svg" class="button-img-lg" /> </button>
+							<button class="btn btn-light control-button reset-button" id="reset_table_button"> <img src="src/svg/trash-outline.svg" class="button-img-lg" /> </button>
 					</div>
 
 					<div class="col-10 col-lg-11 ">
@@ -55,10 +60,10 @@
 									<input class="form-control new-task-entry" id="new_task_name" type="text" placeholder="Task Name">
 							</div>
 							<div class="col-sm-12 col-md-5 task-buttons">
-								<button class="btn btn-light control-button" id="add_task_button"> <img src="/dist/src/svg/add-outline.svg" class="button-img" /> </button>
-								<button class="btn btn-light control-button edit-task" id="moveup_task_button"> <img src="/dist/src/svg/arrow-up-outline.svg" class="button-img" />  </button>
-								<button class="btn btn-light control-button edit-task" id="movedown_task_button"> <img src="/dist/src/svg/arrow-down-outline.svg" class="button-img" />  </button>
-								<button class="btn btn-light control-button remove-task" id="remove_task_button"> <img src="/dist/src/svg/close-outline.svg" class="button-img" /> </button>													
+								<button class="btn btn-light control-button" id="add_task_button"> <img src="src/svg/add-outline.svg" class="button-img" /> </button>
+								<button class="btn btn-light control-button edit-task" id="moveup_task_button"> <img src="src/svg/arrow-up-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button edit-task" id="movedown_task_button"> <img src="src/svg/arrow-down-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button remove-task" id="remove_task_button"> <img src="src/svg/close-outline.svg" class="button-img" /> </button>													
 							</div>
 						</div>
 
@@ -75,10 +80,10 @@
 									</select>
 							</div>
 							<div class="col-sm-12 col-md-5 column-buttons">
-								<button class="btn btn-light control-button" id="add_column_button"> <img src="/dist/src/svg/add-outline.svg" class="button-img" /> </button>
-								<button class="btn btn-light control-button edit-column" id="moveleft_column_button"> <img src="/dist/src/svg/arrow-back-outline.svg" class="button-img" />  </button>
-								<button class="btn btn-light control-button edit-column" id="moveright_column_button"> <img src="/dist/src/svg/arrow-forward-outline.svg" class="button-img" />  </button>
-								<button class="btn btn-light control-button remove-column" id="remove_column_button"> <img src="/dist/src/svg/close-outline.svg" class="button-img" /> </button>	
+								<button class="btn btn-light control-button" id="add_column_button"> <img src="src/svg/add-outline.svg" class="button-img" /> </button>
+								<button class="btn btn-light control-button edit-column" id="moveleft_column_button"> <img src="src/svg/arrow-back-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button edit-column" id="moveright_column_button"> <img src="src/svg/arrow-forward-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button remove-column" id="remove_column_button"> <img src="src/svg/close-outline.svg" class="button-img" /> </button>	
 							</div>
 						</div>	
 					</div>

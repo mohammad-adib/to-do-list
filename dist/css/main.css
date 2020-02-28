@@ -1,0 +1,296 @@
+.style-just-started {
+  background-color: #acfcdb;
+  color: black;
+}
+
+.style-in-progress {
+  background-color: #faff28;
+  color: black;
+}
+
+.style-stuck {
+  background-color: #e2445c;
+  color: white;
+}
+
+.style-waiting-for-review {
+  background-color: #579cfc;
+  color: white;
+}
+
+.style-done {
+  background-color: #00c875;
+  color: white;
+}
+
+.task-status {
+  cursor: pointer;
+}
+
+.status {
+  display: none;
+  position: absolute;
+  z-index: 2;
+}
+
+.status .dropdown-toggle {
+  opacity: 0%;
+  cursor: default;
+}
+
+.status .status-menu {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.status .status-stuck {
+  background-color: #e2445c;
+  color: white;
+  margin-top: 8px;
+}
+
+.status .status-stuck:hover {
+  background-color: #e97082;
+}
+
+.status .status-in-progress {
+  background-color: #faff28;
+  color: black;
+  margin-top: 8px;
+}
+
+.status .status-in-progress:hover {
+  background-color: #fbff5b;
+}
+
+.status .status-waiting-for-review {
+  background-color: #579cfc;
+  color: white;
+  margin-top: 8px;
+}
+
+.status .status-waiting-for-review:hover {
+  background-color: #89bafd;
+}
+
+.status .status-done {
+  background-color: #00c875;
+  color: white;
+  margin-top: 8px;
+}
+
+.status .status-done:hover {
+  background-color: #00fb93;
+}
+
+.status .status-just-started {
+  background-color: #acfcdb;
+  color: black;
+}
+
+.status .status-just-started:hover {
+  background-color: #ddfef0;
+}
+
+.style-urgent {
+  background-color: gray;
+  color: white;
+}
+
+.style-high {
+  background-color: #e2445c;
+  color: white;
+}
+
+.style-medium {
+  background-color: #80127a;
+  color: white;
+}
+
+.style-low {
+  background-color: #579cfc;
+  color: white;
+}
+
+.task-priority {
+  cursor: pointer;
+}
+
+.priority {
+  display: none;
+  position: absolute;
+  z-index: 2;
+}
+
+.priority .dropdown-toggle {
+  opacity: 0%;
+  cursor: default;
+}
+
+.priority .priority-menu {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.priority .priority-urgent {
+  background-color: gray;
+  color: white;
+  margin-top: 8px;
+}
+
+.priority .priority-urgent:hover {
+  background-color: #9a9a9a;
+}
+
+.priority .priority-high {
+  background-color: #e2445c;
+  color: white;
+  margin-top: 8px;
+}
+
+.priority .priority-high:hover {
+  background-color: #e97082;
+}
+
+.priority .priority-medium {
+  background-color: #80127a;
+  color: white;
+  margin-top: 8px;
+}
+
+.priority .priority-medium:hover {
+  background-color: #ad18a5;
+}
+
+.priority .priority-low {
+  background-color: #579cfc;
+  color: white;
+  margin-top: 8px;
+}
+
+.priority .priority-low:hover {
+  background-color: #89bafd;
+}
+
+.table-container {
+  padding-left: 2vw;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.tablenamepicker {
+  padding: 0 12px;
+  margin: 10px 10px 10px 0;
+  border: 0px;
+  font-size: 2em;
+  width: 500px;
+}
+
+.table-main {
+  display: block;
+  width: 800px;
+  border-right: 1px #e6e6e6 solid;
+  border-left: 1px #e6e6e6 solid;
+}
+
+.table-main .table-header {
+  background-color: azure;
+}
+
+.table-main .table-header {
+  vertical-align: middle;
+}
+
+.table-main .task-status {
+  padding-left: 20px;
+  width: 180px;
+  vertical-align: middle;
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+
+.table-main .task-priority {
+  padding-left: 20px;
+  width: 120px;
+  vertical-align: middle;
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+
+.table-main .task-date {
+  width: 120px;
+}
+
+.table-main .task-text {
+  width: 150px;
+}
+
+.table-main .taskpicker {
+  width: 100%;
+}
+
+.table-main .columnpicker {
+  display: inline-block;
+  width: 70%;
+  border: 0px;
+  background-color: azure;
+}
+
+.table-main #column_checkbox {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.table-main #task_checkbox {
+  width: 15px;
+  height: 15px;
+}
+
+.button-img {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  fill: white;
+  top: -2px;
+}
+
+.modify-task {
+  margin-bottom: 10px;
+}
+
+.control-button {
+  border: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.reset-table {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.reset-button {
+  margin-bottom: 10px;
+  width: 70px;
+  height: 90px;
+}
+
+.button-img-lg {
+  width: 30px;
+  height: 30px;
+}
+
+.new-column-entry, .new-column-type, .new-task-entry {
+  margin-bottom: 10px;
+}
+
+.root {
+  padding: 1vw;
+}
+/*# sourceMappingURL=main.css.map */
