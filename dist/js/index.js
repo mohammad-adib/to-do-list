@@ -1,14 +1,12 @@
 /* 
 ------------------------------------------------------------------------------------------
-This is the main javascript code for the "To Do List Task" project
+This is the main javascript code for the "To Do List Task" project 
 The following can divided into four main parts:
     I)      Constant declarations
     II)     Varaiable declarations
     III)    Classes
     IV)     Main Procedure
-    V)      Helper Functions
-
-The created   
+    V)      Helper Functions 
 ------------------------------------------------------------------------------------------
 */
 //  CONSTANT DECLARATIONS
@@ -581,6 +579,8 @@ function mainProcedure() {
 
 // ------------------------------------------------------------------------------
 // FUNCTIONS
+
+// Initailizes headers when there are no save tables in the storage
 function createInitialHeaders() {
     taskNameHeader = new Header("Task Name", DATATYPES.NAME);
     statusHeader = new Header("Status", DATATYPES.STATUS);
@@ -589,6 +589,7 @@ function createInitialHeaders() {
     return [taskNameHeader,statusHeader,dueDateHeader,priorityHeader]
 }
 
+// Renders the table [used at first initializationan and when user resets the table
 function tableRender(){
     tempStorage = JSON.parse(localStorage.getItem("mainTableStorage"));
     if (tempStorage===null) {
@@ -609,6 +610,10 @@ function tableRender(){
     decideAccess();
 }
 
+// -----------------------------------------------------------------
+// HELPER FUNCTIONS OF TASKS 
+// -----------------------------------------------------------------
+// Adds a new task to the HTML table and the mainTableStorage
 function addNewTask (taskName) {
     const task = [];
     for (let i=0; i<mainTableStorage.headers.length; i++){
@@ -619,6 +624,7 @@ function addNewTask (taskName) {
     mainTableStorage.addRow().setCellValue(-1,0,taskName)
 }
 
+// Removes task(s) from the HTML table and the corresponding row in the mainTableStorage
 function removeTasks() {
     selectedTasks.sort()
     selectedTasks.reverse()
@@ -628,6 +634,7 @@ function removeTasks() {
     mainTableStorage.removeRows(selectedTasks)
 }
 
+// Moves a task in the HTML table and the corresponding row in the mainTableStorage
 function moveTask(index,moveDirection) {
     row = $(".table-main .table-row").eq(index)
     maxIndex = $(".table-main .table-row").length-1;
@@ -648,7 +655,41 @@ function moveTask(index,moveDirection) {
     
 }
 
+// Manages the selection of checkbox of each task  
+function toggleTaskSelection(index,check_value) {
+    if (check_value && (selectedColumns.length>0)) {
+        let oldSelectedColumns = [...selectedColumns]
+        for (let sc of oldSelectedColumns){
+            toggleColumnSelection(sc,false);
+        }
+    }
+    switch(index) {
+        // SELECTS (OR DESELECTS) ALL TASKS IN THE TABLE
+        case -1:
+            selectedTasks = [];
+            for (i = 1; i < $(".table-main #task_checkbox").length; i++) {
+                if (check_value) {
+                    changeSelected(selectedTasks,i-1,check_value);
+                }
+                $(".table-main #task_checkbox").eq(i).prop('checked',check_value);
+            }
+            break;
+        // SELECTS (OR DESELECTS) A SINGLE TASK
+        default:
+            if (!check_value) {
+                $(".table-main #task_checkbox").eq(0).prop('checked',false);
+                $(".table-main #task_checkbox").eq(index+1).prop('checked',false);
+            }
+            changeSelected(selectedTasks,index,check_value);
+      }
+      decideAccess()
+}
 
+// -----------------------------------------------------------------
+// HELPER FUNCTIONS OF COLUMNS 
+// -----------------------------------------------------------------
+
+// Adds a new column to the HTML table and the mainTableStorage
 function addColumn(name,dataType) {
     if (name==="") {
         name = dataType;
@@ -658,7 +699,7 @@ function addColumn(name,dataType) {
     mainTableStorage.adjustHTMLTableWidth($('.table-main'))
 }
 
-
+// Removes column(s) from the HTML table and the mainTableStorage
 function removeColumns(){
     selectedColumns.sort()
     selectedColumns.reverse()
@@ -677,6 +718,7 @@ function removeColumns(){
     
 }
 
+// Moves a column in the HTML table and the corresponding row in the mainTableStorage
 function moveColumn(index,moveDirection) {
     maxIndex = $(".table-main .header-row .table-header").length-2;
 
@@ -706,42 +748,7 @@ function moveColumn(index,moveDirection) {
     mainTableStorage.moveColumn(index,moveDirection)
 }
 
-
-
-function updateSelected(arr,index) {
-    arr[0] = index
-}
-
-function toggleTaskSelection(index,check_value) {
-    if (check_value && (selectedColumns.length>0)) {
-        let oldSelectedColumns = [...selectedColumns]
-        for (let sc of oldSelectedColumns){
-            toggleColumnSelection(sc,false);
-        }
-    }
-    switch(index) {
-        // SELECTS (OR DESELECTS) ALL TASKS IN THE TABLE
-        case -1:
-            selectedTasks = [];
-            for (i = 1; i < $(".table-main #task_checkbox").length; i++) {
-                if (check_value) {
-                    changeSelected(selectedTasks,i-1,check_value);
-                }
-                $(".table-main #task_checkbox").eq(i).prop('checked',check_value);
-            }
-            break;
-        // SELECTS (OR DESELECTS) A SINGLE TASK
-        default:
-            if (!check_value) {
-                $(".table-main #task_checkbox").eq(0).prop('checked',false);
-                $(".table-main #task_checkbox").eq(index+1).prop('checked',false);
-            }
-            changeSelected(selectedTasks,index,check_value);
-      }
-      decideAccess()
-    
-}
-
+// Manages the selection of checkbox of each column  
 function toggleColumnSelection(index,check_value) {
     if (check_value && (selectedTasks.length>0)) {
         let oldSelectedTasks = [...selectedTasks]
@@ -758,6 +765,11 @@ function toggleColumnSelection(index,check_value) {
 }
 
 
+// -----------------------------------------------------------------
+// GENERAL FUNCTIONS 
+// -----------------------------------------------------------------
+
+// Add or removes an index to the selectedColumns/Tasks array
 function changeSelected(arr,index,check_value) {
     if (check_value) {
         arr.push(index);
@@ -769,9 +781,12 @@ function changeSelected(arr,index,check_value) {
     }
 }
 
+// Updates the selectedColumns/Tasks array
+function updateSelected(arr,index) {
+    arr[0] = index
+}
 
-
-
+// (Dis)activates move and delete buttons on the panel based on checkboxes
 function decideAccess() {
     switch(selectedTasks.length) {
         case 0:
@@ -803,6 +818,7 @@ function decideAccess() {
       } 
 }
 
+// Changes disable property of each element
 function toggleEnabled(className,value) {
     $(`.${className}`).prop('disabled',!value);
 }
