@@ -7,6 +7,8 @@ The following can divided into four main parts:
     III)    Classes
     IV)     Main Procedure
     V)      Helper Functions
+
+The created   
 ------------------------------------------------------------------------------------------
 */
 //  CONSTANT DECLARATIONS
@@ -131,7 +133,7 @@ class TableStorage {
     addColumn (newHeader) {
         this.headers = [...this.headers, newHeader];
         for (let i=0; i<(this.rows); i++) {
-            this.innerStorage[i].push(null);
+            this.innerStorage[i].push("");
         }
         this.cols += 1;
         this.saveTableStorage()
@@ -143,7 +145,7 @@ class TableStorage {
             for (let i=0; i<this.rows; i++) {
                 this.innerStorage[i].splice(index,1)
             }
-            tis.headers.splice(index,1)
+            this.headers.splice(index,1)
             this.cols -= 1;
         }
         this.saveTableStorage()
@@ -249,6 +251,9 @@ class TableStorage {
             case "Priority":
                 return DATATYPES.PRIORITY;
                 break;
+            case "Status":
+                return DATATYPES.STATUS;
+                break;    
             default:
                 return DATATYPES.NOTYPE;
                 break;            
@@ -529,7 +534,6 @@ function mainProcedure() {
 
     // TRIGGERRING STATUS DROPDOWN
     $(".table-main").on('click','.task-status',function(e){
-        console.log('STATUS')
         e.stopPropagation();
         let cssStatus = $(this).offset();
         cssStatus['display']='block';
@@ -655,7 +659,6 @@ function addColumn(name,dataType) {
 }
 
 
-
 function removeColumns(){
     selectedColumns.sort()
     selectedColumns.reverse()
@@ -681,7 +684,6 @@ function moveColumn(index,moveDirection) {
         return;
     }
     
-
     for (let row of $(".table-main .table-row")) {
         col = $(row).children(".table-cell").eq(index+1);
         if (moveDirection === DIRECTIONS.LEFT) {
