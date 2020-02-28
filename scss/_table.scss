@@ -1,0 +1,76 @@
+.table-container {
+    padding-left: 2vw;
+    width: 100%;
+    overflow-x: scroll;
+}
+
+.tablenamepicker {
+    padding: 0 12px;
+    margin: 10px 10px 10px 0;
+    border: 0px;
+    font-size: 2em;
+    width: 500px;
+}
+
+.table-main {
+    display: block;
+    width: 800px;
+    border-right: 1px #e6e6e6 solid;
+    border-left: 1px #e6e6e6 solid; 
+
+    .table-header {
+        background-color: $header-back-color;
+    }
+
+    .table-header {
+        vertical-align: middle;
+    }
+
+
+    .task-status{
+        padding-left: 20px;
+        width: 180px;
+        vertical-align: middle;
+        @include transition-ease;
+    }
+
+    .task-priority{
+        padding-left: 20px;
+        width: 120px;
+        vertical-align: middle;
+        @include transition-ease;
+    }
+
+    .task-date {
+        width: 120px;
+    }
+
+    .task-text {
+        width: 150px;
+    }
+
+    .taskpicker {
+        width: 100%;
+    }
+
+    .columnpicker {
+        display: inline-block;
+        width: 70%;
+        border: 0px;
+        background-color: $header-back-color;
+    }
+
+    #column_checkbox{
+        width: 15px;
+        height: 15px;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    #task_checkbox{
+        width: 15px;
+        height: 15px;
+    }
+}
+
+

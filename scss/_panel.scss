@@ -1,0 +1,39 @@
+.button-img{
+    position: relative;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    fill: white;
+    top: -2px;
+}
+
+
+.modify-task{
+    margin-bottom: 10px;
+}
+
+.control-button{
+    border: 1px solid #e0e0e0;
+    position: relative;
+}
+
+
+.reset-table{
+    display: flex;
+    justify-content: center;
+}
+
+.reset-button{
+    margin-bottom: 10px;
+    width: 70px;
+    height: 90px;
+}
+
+.button-img-lg{
+    width: 30px;
+    height: 30px;
+}
+
+.new-column-entry , .new-column-type,.new-task-entry{
+    margin-bottom: 10px;
+}

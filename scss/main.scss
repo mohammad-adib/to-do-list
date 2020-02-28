@@ -2,107 +2,12 @@
 @import 'mixins';
 @import 'status';
 @import 'priority';
+@import 'table';
+@import 'panel';
 
-
-.table-container {
-    // overflow: scroll;
+.root {
+    padding: 1vw;
 }
-
-.button-img{
-    position: relative;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    fill: white;
-    top: -2px;
-}
-
-.new-task-entry{
-    display: inline-block;
-    width: 70%;
-}
-
-.new-column-entry{
-    display: inline-block;
-    width: 34.8%;
-}
-
-.new-column-type{
-    display: inline-block;
-    width: 34.8%;
-}
-
-.control-button{
-    border: 1px solid #e0e0e0;
-    position: relative;
-    top: -3px;
-}
-
-.tablenamepicker {
-    margin: 10px;
-    border: 0px;
-    font-size: 2em;
-    width: 500px;
-}
-
-.table-main {
-    display: block;
-    width: 800px;
-    .table-header {
-        background-color: $header-back-color;
-    }
-
-    .table-header {
-        vertical-align: middle;
-    }
-
-
-    .task-status{
-        padding-left: 20px;
-        width: 180px;
-        vertical-align: middle;
-        @include transition-ease;
-    }
-
-    .task-priority{
-        padding-left: 20px;
-        width: 120px;
-        vertical-align: middle;
-        @include transition-ease;
-    }
-
-    .task-date {
-        width: 120px;
-    }
-
-    .task-text {
-        width: 150px;
-    }
-
-    .taskpicker {
-        width: 100%;
-    }
-
-    .columnpicker {
-        display: inline-block;
-        width: 70%;
-        border: 0px;
-        background-color: $header-back-color;
-    }
-
-    #column_checkbox{
-        width: 15px;
-        height: 15px;
-        margin-right: 5px;
-        vertical-align: middle;
-    }
-
-    #task_checkbox{
-        width: 15px;
-        height: 15px;
-    }
-}
-
 
 
 

@@ -42,60 +42,54 @@
 	  </div>
 
 	<div class="root">
+		<div class="card">
+			<div class="card-body control-panel">
+				<div class="row">
+					<div class="col-2 col-lg-1 resset-table">
+							<button class="btn btn-light control-button reset-button" id="reset_table_button"> <img src="/dist/src/svg/trash-outline.svg" class="button-img-lg" /> </button>
+					</div>
 
-		<div class="control-panel">
-			<div class="reset-table">
-					<button class="btn btn-light control-button" id="reset_table_button"> <img src="/dist/src/svg/trash-outline.svg" class="button-img" /> </button>
-			</div>
-			<div class="modify-task">
-					<input class="form-control new-task-entry" id="new_task_name" type="text" placeholder="Task Name">
-					<button class="btn btn-light control-button" id="add_task_button"> <img src="/dist/src/svg/add-outline.svg" class="button-img" /> </button>
-					<button class="btn btn-light control-button edit-task" id="moveup_task_button"> <img src="/dist/src/svg/arrow-up-outline.svg" class="button-img" />  </button>
-					<button class="btn btn-light control-button edit-task" id="movedown_task_button"> <img src="/dist/src/svg/arrow-down-outline.svg" class="button-img" />  </button>
-					<button class="btn btn-light control-button remove-task" id="remove_task_button"> <img src="/dist/src/svg/close-outline.svg" class="button-img" /> </button>
-			</div>
+					<div class="col-10 col-lg-11 ">
+						<div class="row modify-task">
+							<div class="col-sm-12 col-md-7">
+									<input class="form-control new-task-entry" id="new_task_name" type="text" placeholder="Task Name">
+							</div>
+							<div class="col-sm-12 col-md-5 task-buttons">
+								<button class="btn btn-light control-button" id="add_task_button"> <img src="/dist/src/svg/add-outline.svg" class="button-img" /> </button>
+								<button class="btn btn-light control-button edit-task" id="moveup_task_button"> <img src="/dist/src/svg/arrow-up-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button edit-task" id="movedown_task_button"> <img src="/dist/src/svg/arrow-down-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button remove-task" id="remove_task_button"> <img src="/dist/src/svg/close-outline.svg" class="button-img" /> </button>													
+							</div>
+						</div>
 
-			<div class="modify-column">
-					<input class="form-control new-column-entry" id="new_column_name" type="text" placeholder="Column Name">
-					<select class="form-control new-column-type" id="new_column_type">
-							<option>Text</option>
-							<option>Due Date</option>
-							<option>Status</option>
-							<option>Priority</option>
-					</select>
-					<button class="btn btn-light control-button" id="add_task_button"> <img src="/dist/src/svg/add-outline.svg" class="button-img" /> </button>
-					<button class="btn btn-light control-button edit-column" id="moveleft_column_button"> <img src="/dist/src/svg/arrow-back-outline.svg" class="button-img" />  </button>
-					<button class="btn btn-light control-button edit-column" id="moveright_column_button"> <img src="/dist/src/svg/arrow-forward-outline.svg" class="button-img" />  </button>
-					<button class="btn btn-light control-button remove-column" id="remove_column_button"> <img src="/dist/src/svg/close-outline.svg" class="button-img" /> </button>
+						<div class="row modify-column">	
+							<div class="col-sm-8 col-md-5">
+								<input class="form-control new-column-entry" id="new_column_name" type="text" placeholder="Column Name">
+							</div>
+							<div class="col-sm-4 col-md-2">
+									<select class="form-control new-column-type" id="new_column_type">
+											<option>Text</option>
+											<option>Due Date</option>
+											<option>Status</option>
+											<option>Priority</option>
+									</select>
+							</div>
+							<div class="col-sm-12 col-md-5 column-buttons">
+								<button class="btn btn-light control-button" id="add_column_button"> <img src="/dist/src/svg/add-outline.svg" class="button-img" /> </button>
+								<button class="btn btn-light control-button edit-column" id="moveleft_column_button"> <img src="/dist/src/svg/arrow-back-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button edit-column" id="moveright_column_button"> <img src="/dist/src/svg/arrow-forward-outline.svg" class="button-img" />  </button>
+								<button class="btn btn-light control-button remove-column" id="remove_column_button"> <img src="/dist/src/svg/close-outline.svg" class="button-img" /> </button>	
+							</div>
+						</div>	
+					</div>
+				</div>	
 			</div>
-
-			<!-- <div class="add-column">
-				<label>New column</label>
-				<input id="new_column_name" type="text" placeholder="Column Name">
-				<select class="form-control" id="new_column_type">
-					<option>Text</option>
-					<option>Due Date</option>
-					<option>Status</option>
-					<option>Priority</option>
-				 </select>
-				<button id="add_column_button"> Add </button>
-			</div>
-			<div class="edit-column">
-					<button id="moveleft_column_button"> Move Left </button>
-					<button id="moveright_column_button"> Move Right </button>
-			</div>
-			<div class="remove-column">
-					<button id="remove_column_button"> Remove </button>
-			</div> -->
 		</div>
 
-
-
-
-		</div>
 		<div class="table-container">
 
 		</div>
+
 	</div>
 
 
