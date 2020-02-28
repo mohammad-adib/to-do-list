@@ -76,6 +76,7 @@ class TableStorage {
         this.cols = initialHeaders.length;
         this.rows = innerStorage.length;
         this.innerStorage = innerStorage;
+        this.saveTableStorage()
     }
     addRow () {
         let newRow = [];
@@ -119,6 +120,7 @@ class TableStorage {
             this.innerStorage[i].push(null);
         }
         this.cols += 1;
+        this.saveTableStorage()
         return this;      
     } 
 
@@ -130,12 +132,13 @@ class TableStorage {
             this.headers.splice(index,1)
             this.cols -= 1;
         }
+        this.saveTableStorage()
         return this;
     }
 
     moveColumn (index, moveDirection) {
         if ((moveDirection === DIRECTIONS.LEFT && index===1) || (moveDirection === DIRECTIONS.RIGHT && index===this.cols)) {
-            return;
+            return this;
         }
 
         if (moveDirection === DIRECTIONS.RIGHT) {
@@ -155,6 +158,7 @@ class TableStorage {
                 }
             }    
         }
+        this.saveTableStorage()
         return this;
     }
 
@@ -170,6 +174,7 @@ class TableStorage {
         }
 
         this.innerStorage[rowIndex][colIndex] = value;
+        this.saveTableStorage()
         return this;
     }
     getCellValue(row,col) {
@@ -182,6 +187,18 @@ class TableStorage {
             colIndex = this.cols + col;
         }   
         return this.innerStorage[rowIndex][colIndex];
+    }
+
+    setHeaderName(index,name){
+        this.headers[index].name = name;
+        this.saveTableStorage()
+        return this;
+    }
+
+    setTableName(name){
+        this.tableName = name;
+        this.saveTableStorage()
+        return this;
     }
 
     processCellValue (dataType,value) {
@@ -267,8 +284,15 @@ class TableStorage {
         }
     }
 
+    generateHTMLTableTitle(){
+        // TABLE TITLE
+        $(`.${CLS.TBL_CNTR}`).append(`<input type='text' class='lead tablenamepicker' value="${this.tableName}"/>`)
+    } 
+    removeHTMLTableTitle(){
+        // TABLE TITLE
+        $('.tablenamepicker').remove()
+    }  
     generateHTMLTable() {
-        
         // TABLE
         $(`.${CLS.TBL_CNTR}`).append(`<table class='table table-sm ${CLS.TBL_MN}' > </table>`);
         let mainTable = $(`.${CLS.TBL_CNTR} .${CLS.TBL_MN}`)
@@ -333,10 +357,16 @@ class TableStorage {
         $(mainTable).css('width',`${tableWidth}px`);
     }
 
+    removeHTMLTable(mainTable){
+        $(mainTable).remove()
+    }
+
     saveTableStorage(){
         localStorage.setItem("mainTableStorage",JSON.stringify(this));
     }
-
+    clearTableStorage(){
+        localStorage.removeItem("mainTableStorage");
+    }
 }
 
 // MAIN PROCEDURE
@@ -345,21 +375,7 @@ $(document).ready(mainProcedure())
 
 function mainProcedure() {
 
-    tempStorage = JSON.parse(localStorage.getItem("mainTableStorage"));
-    if (tempStorage===null) {
-        initialHeaders = createInitialHeaders();
-        mainTableStorage = new TableStorage("Table1",initialHeaders);
-        mainTableStorage.addRow().setCellValue(0,0,"Task1");
-    } else {
-        mainTableStorage = new TableStorage(tempStorage.tableName,tempStorage.headers,tempStorage.innerStorage);
-    }
-
-
-    mainTableStorage.generateHTMLTable()
-    mainTableStorage.adjustHTMLTableWidth()
-
-    decideAccess();
-
+    tableRender()
     // ADD TASK BUTTON EVENT
     $("#add_task_button").on('click',function(){
         // ADDS NEW ITEM TO THE TABLE
@@ -392,10 +408,18 @@ function mainProcedure() {
         toggleTaskSelection(index,check_value);
     })
 
+    // ADD COLUMN BUTTON EVENT
+    $("#reset_table_button").on('click',function(){
+        mainTableStorage.clearTableStorage();
+        mainTableStorage.removeHTMLTableTitle()
+        mainTableStorage.removeHTMLTable($('.table-main'),)
+        tableRender()
+    })
 
     // ADD COLUMN BUTTON EVENT
     $("#add_column_button").on('click',function(){
         addColumn( $("#new_column_name").val(),$("#new_column_type").val())
+        $("#new_column_name").val("")
     })
 
     // MOVE UP COLUMN BUTTON EVENT
@@ -437,6 +461,16 @@ function mainProcedure() {
         selectedHeader = {col:colIndex}
     })
 
+    // CHANGING TABLE NAME EVENT
+    $("body").on('blur',".tablenamepicker",function(){
+        let prevValue = mainTableStorage.tableName;
+        if ($(this).val() !== ""){
+            mainTableStorage.setTableName($(this).val());
+        }else {
+            $(this).val(prevValue);
+        }
+    })
+
     // CHANGING TASK NAME EVENT
     $("body").on('blur',".taskpicker",function(){
         let prevValue = mainTableStorage.getCellValue(selectedCell.row,selectedCell.col);
@@ -456,7 +490,7 @@ function mainProcedure() {
     $("body").on('blur',".columnpicker",function(){
         let prevValue = mainTableStorage.headers[selectedHeader.col].name;
         if ($(this).val() !== ""){
-            mainTableStorage.headers[selectedHeader.col].name = $(this).val()
+            mainTableStorage.setHeaderName(selectedHeader.col, $(this).val())
         }else {
             $(this).val(prevValue);
         }
@@ -528,6 +562,21 @@ function createInitialHeaders() {
     dueDateHeader = new Header("Due Date", DATATYPES.DATE);
     priorityHeader = new Header("Priority", DATATYPES.PRIORITY);
     return [taskNameHeader,statusHeader,dueDateHeader,priorityHeader]
+}
+
+function tableRender(){
+    tempStorage = JSON.parse(localStorage.getItem("mainTableStorage"));
+    if (tempStorage===null) {
+        initialHeaders = createInitialHeaders();
+        mainTableStorage = new TableStorage("To-Do List1",initialHeaders);
+        mainTableStorage.addRow().setCellValue(0,0,"Task1");
+    } else {
+        mainTableStorage = new TableStorage(tempStorage.tableName,tempStorage.headers,tempStorage.innerStorage);
+    }
+    mainTableStorage.generateHTMLTableTitle()
+    mainTableStorage.generateHTMLTable()
+    mainTableStorage.adjustHTMLTableWidth()
+    decideAccess();
 }
 
 function addNewTask (taskName) {
