@@ -777,6 +777,6 @@ function decideAccess() {
 
 function toggleEnabled(className,value) {
     $(`.${className}`).prop('disabled',!value);
-
+}
 
 
