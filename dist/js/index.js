@@ -89,7 +89,6 @@ class TableStorage {
 
     removeRows (indices) {
         for (let index of indices){
-            // console.log(index)
             this.innerStorage.splice(index,1);
             this.rows -= 1;
         }
@@ -246,6 +245,28 @@ class TableStorage {
         }
     }
 
+    _returnColumnWidth(dataType) {
+        switch (dataType){
+            case DATATYPES.TEXT:
+                return 150;
+                break;    
+            case DATATYPES.DATE:
+                return 120;
+                break;                 
+            case DATATYPES.PRIORITY:
+                return 120;
+                break;
+            case DATATYPES.STATUS:
+                return 180;
+                break; 
+            case DATATYPES.NAME:
+                return 250;
+                break;  
+            default:
+                return 0;
+        }
+    }
+
     generateHTMLTable() {
         
         // TABLE
@@ -265,7 +286,7 @@ class TableStorage {
             headerRow.append(`<th class=${CLS.TBL_HDR}><input type="checkbox" id='${IDS.CLM_CHK}' />${content}</th>`)
         }
         $(`#${IDS.CLM_CHK}`).eq(0).css("display","none");
-        
+        this.adjustHTMLTableWidth(mainTable);
         //  TABLE ROW
         for (let task of this.innerStorage) {
             this.generateHTMLRow(mainTable,task)
@@ -291,11 +312,9 @@ class TableStorage {
     }
 
     generateHTMLColumn(mainTable,name,columnType) {
-        console.log(CLTYPCLS[columnType])
         for (let row of $(mainTable).children(".table-row")) {
             let value = this.processCellValue(this._returnType(columnType),"");
             let newTableCell = `<td class='table-cell ${CLTYPCLS[columnType]}'>${value}</td>`
-            console.log(newTableCell)
             $(row).children('.table-cell').eq(-1).after(newTableCell)
         }
         let row = $(mainTable).children(".header-row");
@@ -303,6 +322,15 @@ class TableStorage {
         $(row).children(".table-header").eq(-1).after(newTableCell)
        
        
+    }
+
+    adjustHTMLTableWidth(mainTable) {
+        let tableWidth = 15;
+
+        for (let header of this.headers) {
+            tableWidth += this._returnColumnWidth(header.dataType);
+        }
+        $(mainTable).css('width',`${tableWidth}px`);
     }
 
     saveTableStorage(){
@@ -328,6 +356,7 @@ function mainProcedure() {
 
 
     mainTableStorage.generateHTMLTable()
+    mainTableStorage.adjustHTMLTableWidth()
 
     decideAccess();
 
@@ -366,10 +395,7 @@ function mainProcedure() {
 
     // ADD COLUMN BUTTON EVENT
     $("#add_column_button").on('click',function(){
-        let name = $("#new_column_name").val();
-        let dataType =  $("#new_column_type").val();
-        mainTableStorage.generateHTMLColumn($('.table-main'),name,dataType)
-        mainTableStorage.addColumn(new Header(name,mainTableStorage._returnType(dataType)))
+        addColumn( $("#new_column_name").val(),$("#new_column_type").val())
     })
 
     // MOVE UP COLUMN BUTTON EVENT
@@ -409,7 +435,6 @@ function mainProcedure() {
         let tableRow = $(this).parents(".header-row");
         let colIndex = $(tableRow).children(".table-header").index($(this))-1
         selectedHeader = {col:colIndex}
-        console.log(selectedHeader)
     })
 
     // CHANGING TASK NAME EVENT
@@ -545,6 +570,16 @@ function moveTask(index,moveDirection) {
 }
 
 
+function addColumn(name,dataType) {
+    if (name==="") {
+        name = dataType;
+    }
+    mainTableStorage.generateHTMLColumn($('.table-main'),name,dataType)
+    mainTableStorage.addColumn(new Header(name,mainTableStorage._returnType(dataType)))
+    mainTableStorage.adjustHTMLTableWidth($('.table-main'))
+}
+
+
 
 function removeColumns(){
     selectedColumns.sort()
@@ -560,6 +595,7 @@ function removeColumns(){
     })
 
     mainTableStorage.removeColumns(selectedColumns)
+    mainTableStorage.adjustHTMLTableWidth($('.table-main'))
     
 }
 
@@ -655,6 +691,7 @@ function changeSelected(arr,index,check_value) {
         }
     }
 }
+
 
 
 
