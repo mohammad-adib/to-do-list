@@ -7,4 +7,4 @@ This is a simple **to-do list** created using [jQuery](https://jquery.com/) 3.4.
 - All changes are instantly saved to localStorage and not lost when the page is refreshed.
 
 
-![Image description](link-to-image)
+![Image description](https://github.com/mohammad-adib/to-do-list/blob/master/preview.JPG)
