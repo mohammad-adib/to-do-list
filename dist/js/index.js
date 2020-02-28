@@ -776,7 +776,12 @@ function decideAccess() {
 }
 
 function toggleEnabled(divClass,value) {
-    $(`.${divClass} *`).prop('disabled',!value);
+    $(`.${divClass}`).prop('disabled',!value);
+//     if (value) {
+//         $(`.${divClass} *`).removeClass('disabled');
+//     } else {
+//         $(`.${divClass} *`).addClass('disabled');
+//     }
 }
 
 
